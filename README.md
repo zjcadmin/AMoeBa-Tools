@@ -125,7 +125,7 @@ sqliteDataBsae.dataFilePath # 数据库文件路径，建议填写绝对路径�
 | --------- | ------- | ------ | ---- | --- | ---------------- |
 | id        | VARCHAR | N      | Y    | 无   | 用户工号             |
 | userName  | VARCHAR | N      | N    | 无   | 用户姓名             |
-| passWord  | VARCHAR | N      | N    | 无   | 用户的AMoeBa系统唯一id  |
+| passWord  | VARCHAR | N      | N    | 无   | 用户的AMoeBa系统唯一id，不是密码  |
 | vaildFlag | VARCHAR | N      | N    | 1   | 是否有效标志。1-有效；0-无效 |
 | role      | VARCHAR | N      | N    | 9   | 用户角色代码           |
 | key       | VARCHAR | Y      | N    | 无   | 系统生成的密钥串         |
