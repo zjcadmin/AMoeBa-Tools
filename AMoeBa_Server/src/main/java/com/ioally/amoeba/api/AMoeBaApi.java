@@ -99,4 +99,13 @@ public interface AMoeBaApi {
      */
     @RequestMapping(value = {"/checkAccess"}, method = {RequestMethod.POST, RequestMethod.GET})
     ResponseDto checkAccess(Map<String, String> param) throws Exception;
+
+    /**
+     * 用于执行sql的服务，返回查询结果或者更新行数
+     *
+     * @param param sql - sql脚本
+     * @return
+     */
+    @RequestMapping(value = {"/sqlExecute"}, method = {RequestMethod.POST, RequestMethod.GET})
+    ResponseDto sqlExecute(Map<String, String> param) throws Exception;
 }

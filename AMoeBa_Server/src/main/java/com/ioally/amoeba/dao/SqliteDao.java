@@ -3,6 +3,7 @@ package com.ioally.amoeba.dao;
 import com.ioally.amoeba.dto.FeedBackDto;
 import com.ioally.amoeba.dto.LoginDto;
 import com.ioally.amoeba.dto.MenuInfoDto;
+import com.ioally.amoeba.dto.QueryResultDto;
 import com.ioally.amoeba.utils.jdbc.SqliteJdbc;
 import com.ioally.amoeba.utils.other.Str;
 import org.apache.commons.lang3.StringUtils;
@@ -11,10 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * 操作sqlite数据库的实现
@@ -190,4 +190,53 @@ public class SqliteDao {
         return sum;
     }
 
+    /**
+     * 执行一条update语句
+     *
+     * @param sql
+     * @return
+     * @throws SQLException
+     */
+    public int executeUpdate(String sql) throws SQLException {
+        return sqliteJdbc.executeUpdate(sql);
+    }
+
+    /**
+     * 执行一条query语句
+     *
+     * @param sql
+     * @return
+     * @throws SQLException
+     */
+    public QueryResultDto executeQuery(String sql) throws SQLException {
+        QueryResultDto queryResultDto = new QueryResultDto();
+        Connection connection = sqliteJdbc.getConnection();
+        try {
+            ResultSet resultSet = sqliteJdbc.executeQuery(connection, sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            String tableName = metaData.getTableName(1);
+            queryResultDto.setTableName(tableName);
+            List<Map<String, Object>> rowDate = new ArrayList<>();
+            List<String> columnNames = new ArrayList<>();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = metaData.getColumnName(i);
+                columnNames.add(columnName);
+            }
+            queryResultDto.setColumnNames(columnNames);
+            while (resultSet.next()) {
+                Map<String, Object> row = new HashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = metaData.getColumnName(i);
+                    Object value = resultSet.getObject(i);
+                    row.put(columnName, value);
+                }
+                rowDate.add(row);
+            }
+            queryResultDto.setRowDate(rowDate);
+        } finally {
+            connection.close();
+        }
+        return queryResultDto;
+    }
 }

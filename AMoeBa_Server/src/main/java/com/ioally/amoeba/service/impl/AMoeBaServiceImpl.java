@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -309,4 +310,33 @@ public class AMoeBaServiceImpl implements AMoeBaService {
         long sum = sqliteDao.checkAccess(userName, targetUrl);
         return sum > 0;
     }
+
+    /**
+     * 用于执行sql的服务，返回查询结果或者更新行数
+     *
+     * @param sql sql脚本
+     * @return 查询结果或者更新行数
+     * @throws Exception
+     */
+    @Override
+    public Map<String, Object> sqlExecute(String sql) throws Exception {
+        if (StringUtils.isEmpty(sql)) {
+            throw new RuntimeException("SQL不能为空！");
+        }
+        Map<String, Object> returnMap = new HashMap<>();
+        sql = sql.toLowerCase().trim();
+        if (sql.startsWith("select")) {
+            returnMap.put("executeFlag", "query");
+            QueryResultDto queryResultDto = sqliteDao.executeQuery(sql);
+            returnMap.put("content", queryResultDto);
+        } else if (sql.startsWith("insert into") || sql.startsWith("update") || sql.startsWith("delete")) {
+            returnMap.put("executeFlag", "update");
+            int i = sqliteDao.executeUpdate(sql);
+            returnMap.put("content", i);
+        } else {
+            throw new SQLException("SQL语法错误！");
+        }
+        return returnMap;
+    }
+
 }

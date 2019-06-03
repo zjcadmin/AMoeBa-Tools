@@ -83,13 +83,13 @@ public class SqliteJdbc {
                 i = executeUpdate(connection, sql);
                 connection.commit();
             } catch (SQLException e) {
-                i = -1;
                 LOGGER.error("executeUpdate SQLException", e);
                 try {
                     connection.rollback();
                 } catch (SQLException e1) {
                     LOGGER.error("executeUpdate rollback SQLException", e1);
                 }
+                throw e;
             } finally {
                 connection.close();
             }
@@ -134,6 +134,7 @@ public class SqliteJdbc {
                 } catch (SQLException e1) {
                     LOGGER.error("execute rollback SQLException:{}", e.getMessage());
                 }
+                throw e;
             } finally {
                 connection.close();
             }

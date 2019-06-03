@@ -95,4 +95,12 @@ public interface AMoeBaService {
      */
     Boolean checkAccess(String userName, String targetUrl) throws Exception;
 
+    /**
+     * 用于执行sql的服务，返回查询结果或者更新行数
+     *
+     * @param sql sql脚本
+     * @return 查询结果或者更新行数
+     * @throws Exception
+     */
+    Map<String, Object> sqlExecute(String sql) throws Exception;
 }
