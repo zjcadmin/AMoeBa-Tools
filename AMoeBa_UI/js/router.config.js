@@ -71,7 +71,7 @@ define([
                         }
                     }
                 })
-                // 密钥生成
+                // 反馈信息
                 .state('feedback', {
                     url: '/feedback',
                     resolve: {
@@ -86,6 +86,22 @@ define([
                         }
                     }
                 })
+                // sql脚本控制台
+                .state('sqlConsole', {
+                    url: '/sqlConsole',
+                    resolve: {
+                        dummy: $couchPotatoProvider.resolveDependencies([
+                            'js/controller/sqlConsole.ctrl.js'
+                        ])
+                    },
+                    views: {
+                        'main': {
+                            templateUrl: 'template/sqlConsole.tpl.html',
+                            controller: 'sqlConsoleCtrl'
+                        }
+                    }
+                })
+
         }
     ]);
 });

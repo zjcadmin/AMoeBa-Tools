@@ -22,6 +22,7 @@ define({
         configSys: "/config/sys", // 查询系统配置信息
         addFeedBack: "/addFeedBack", // 新增反馈信息
         checkAccess: "/checkAccess", // 校验是否有权限访问指定页面
+        sqlExecute: "/sqlExecute", // 执行sql
     },
 
     /**
